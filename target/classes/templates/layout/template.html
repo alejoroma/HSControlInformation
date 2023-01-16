@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <title>HS Control Information</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}"/>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/hs-control-information.appspot.com/o/logo_app-removebg-preview.png?alt=media&token=75aee931-85dd-4988-bc7f-c63a6e1be26a">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="fixed-top">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+            <div class="container">
+                <a th:href="@{/}" test-id="home" class="navbar-brand"> <i class="fas fa-home"></i> HS CONTROL INFORMATION</a>
+                <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="#navbarCollapse">
+                    <ul sec:authorize="isAuthenticated()" class="navbar-nav ml-auto">
+                        <li class="nav-item mr-3">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user"></i>
+                                <span>Bienvenido</span>
+                                <span sec:authentication="name">User</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" th:action="@{/logout}">
+                                <a href="#" onclick="this.parentNode.submit();" class="nav-link">
+                                    <i class="fas fa-user-times"></i> Salir
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <section id="main-header" class="py-2 bg-primary text-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/hs-control-information.appspot.com/o/image.png?alt=media&token=d61c8b25-4ebd-4700-aeb6-a52ca26b4b56" width="52px" height="58px">
+                            Control de Información
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <br>
+    <div class="p-xl-5">
+
+    </div>
+    <br>
+</header>
+
+<section th:fragment="buttons" class="py-4 mb-4 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <a th:href="@{/Contracts}" test-id="contracts" class="btn btn-success btn-block">
+                    <i class="fas fa-file-archive"></i> Contratos
+                </a>
+            </div>
+            <div class="col">
+                <a th:href="@{/Clients}" test-id="clients"class="btn btn-success btn-block">
+                    <i class="fas fa-people-arrows"></i> Clientes
+                </a>
+            </div>
+            <div class="col">
+                <a th:href="@{/Employees/}" test-id="employees" class="btn btn-success btn-block">
+                    <i class="fas fa-people-carry"></i> Empleados
+                </a>
+            </div>
+            <!--<div class="col">
+                <a th:href="@{/Clients/}" class="btn btn-success btn-block">
+                    <i class="fas fa-bell"></i> Notificaciones
+                </a>
+            </div>-->
+        </div>
+    </div>
+</section>
+
+<footer th:fragment="footer" class="badge-light text-dark mt-5 p-5">
+    <div class="container">
+        <div class="col">
+            <p class="lead text-center">
+                <span>
+                    HS Ingenieria Sostenible
+                <a href="mailto:hsingenieriasostenible@gmail.com" target="_blank">(hsingenieriasostenible@gmail.com)</a>
+            </span>
+            </p>
+        </div>
+    </div>
+</footer>
+<script th:fragment="scriptDates">
+    function changeDate(firstDate, secondDate){
+        if(document.getElementById(firstDate).value != ''){
+            document.getElementById(secondDate).min = document.getElementById(firstDate).value;
+            document.getElementById(secondDate).disabled = false;
+        }else{
+            document.getElementById(secondDate).value = '';
+            document.getElementById(secondDate).disabled = true;
+        }
+    }
+    function enableInitialDateAct(){
+        changeDate('contractDate','initialDateAct')
+    }
+    function enableReceivalDateAct(){
+        changeDate('initialDateAct','receivalDateAct')
+    }
+    function enableFinalDateLinkOne(){
+        if(document.getElementById('fechaTerminacion1') != null) {
+            changeDate('fechaVinculacion1', 'fechaTerminacion1')
+        }else{
+            changeDate('fechaVinculacion1', 'fechaTerminacion2')
+        }
+    }
+    function enableFinalDateLinkTwo(){
+        if(document.getElementById('fechaTerminacion1') != null) {
+            changeDate('fechaVinculacion2', 'fechaTerminacion1')
+        }else{
+            changeDate('fechaVinculacion2', 'fechaTerminacion2')
+        }
+    }
+    if(document.getElementById('contractDate') != null){
+        document.querySelector("#contractDate").addEventListener('change',enableReceivalDateAct)
+        document.querySelector("#contractDate").addEventListener('change',enableInitialDateAct)
+        document.querySelector("#initialDateAct").addEventListener('change',enableReceivalDateAct)
+    }else if(document.getElementById('fechaVinculacion1') != null){
+        document.querySelector("#fechaVinculacion1").addEventListener('change',enableFinalDateLinkOne)
+    }else if(document.getElementById('fechaVinculacion2') != null){
+        document.querySelector("#fechaVinculacion2").addEventListener('change',enableFinalDateLinkTwo)
+    }
+</script>
+<script th:fragment="scriptAlerts">
+    $(document).ready(function() {
+        setTimeout(function() {
+            $("div.alert").fadeOut(1500);
+        },3000);
+    })
+</script>
+<script th:fragment="scriptValues">
+
+    const formatterPeso = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    })
+
+    function calculateTotal(){
+        var initialValue = (document.getElementById('initialValue').value != '')? parseFloat(document.getElementById('initialValue').value) : 0;
+        var aditionalValue = (document.getElementById('aditionalValue').value != '')? parseFloat(document.getElementById('aditionalValue').value) : 0;
+        return initialValue + aditionalValue;
+    }
+
+    function setTotal(){
+        document.getElementById('totalValue').value = formatterPeso.format(calculateTotal());
+    }
+
+    function calculatePendingValue(){
+        var total = calculateTotal();
+        var invoiceValue = (document.getElementById('invoicedValue').value != '')? parseFloat(document.getElementById('invoicedValue').value) : 0;
+        if(invoiceValue > total){
+            document.getElementById('invoicedValue').setCustomValidity('El valor no puede ser mayor a ' + formatterPeso.format(total));
+        }else{
+            document.getElementById('invoicedValue').setCustomValidity('');
+            document.getElementById('invoicedValue').required = false;
+        }
+        document.getElementById('pendingValue').value = formatterPeso.format((total - invoiceValue));
+    }
+    document.querySelector("#initialValue").addEventListener('change',setTotal)
+    document.querySelector("#aditionalValue").addEventListener('change',setTotal)
+    document.querySelector("#initialValue").addEventListener('change',calculatePendingValue)
+    document.querySelector("#aditionalValue").addEventListener('change',calculatePendingValue)
+    document.querySelector("#invoicedValue").addEventListener('change',calculatePendingValue)
+</script>
+<script th:fragment="scriptFiles">
+    function enableForm(){
+        if(document.getElementById('fielIdFile').value != '' && document.getElementById('fieldNameFile').value != ''){
+            document.getElementById('inputFile').disabled = false;
+            document.getElementById('buttonFile').disabled = false;
+        }else{
+            document.getElementById('inputFile').disabled = true;
+            document.getElementById('buttonFile').disabled = true;
+        }
+    }
+</script>
+<script th:fragment="scriptFormat">
+    const formatterPesoCol = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    })
+    var formatElements = document.getElementsByClassName('formato');
+    for (let i = 0; i < formatElements.length; i++) {
+        var tag = formatElements[i];
+        if(tag.textContent != ''){
+            tag.textContent = formatterPesoCol.format(tag.textContent);
+        }else if(tag.value != ''){
+            tag.value = formatterPesoCol.format(tag.value);
+        }
+    }
+</script>
+</body>
+</html>

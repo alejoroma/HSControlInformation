@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: head"></head>
+<header th:replace="layout/template :: header"></header>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                <h4>Identificación Contrato</h4>
+                <input type="text" class="form-control" name="idContract" readonly th:value="${contract.idContract}">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-11">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Listado Empleados</h4>
+                </div>
+                <br>
+                <div th:if="${employees != null and !employees.isEmpty()}">
+                    <div class="search-box">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5>&nbsp;Buscar Empleado</h5>
+                            </div>
+                            <form th:action="@{'/addEmployeeToContract/page/1/'+${contract.idContract}}"
+                                  method="GET" class="was-validated">
+                                <div class="input-group mb-3 col-md-auto">
+                                    <input type="text" id="myInput" name="myInput" class="form-control"
+                                           placeholder="Ingrese palabra clave" th:value="${keyWordSearch}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" test-id="searchEmployees"
+                                                type="submit">Buscar
+                                        </button>
+                                    </div>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $("#myInput").on("keyup", function () {
+                                                var value = $(this).val().toLowerCase();
+                                                $("#dtBasicExample tr").filter(function () {
+                                                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                                                });
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <br>
+                    <table id="dtBasicExample" class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Identificación</th>
+                            <th>Nombres</th>
+                            <th>Apodo</th>
+                            <th>Teléfono</th>
+                            <th>Enlace</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="employee : ${employees}">
+                            <td th:text="${employee.split(',')[0]}"></td>
+                            <td th:text="${employee.split(',')[1] + ' ' + employee.split(',')[2]}"></td>
+                            <td th:text="${employee.split(',')[3]}"></td>
+                            <td th:text="${employee.split(',')[4]}"></td>
+                            <td>
+                                <a th:href="@{/crearAsociacion/{idContract}/{idEmployee} (idContract=${contract.idContract}, idEmployee=${employee.split(',')[0]})}"
+                                   test-id="asociateEmployee" class="btn btn-outline-primary btn-block"
+                                >Añadir</a>
+                            </td>
+                        </tbody>
+                    </table>
+                    <nav class="form-inline">
+                        <ul class="pagination">
+                            <li class="page-item p-2">N° Total Items: [[${totalItems}]] Pagina [[${currentPage}]] de
+                                [[${totalPages}]]
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link btn btn-light" th:if="${currentPage > 1}"
+                                   th:href="@{'/addEmployeeToContract/page/1/'+${contract.idContract}}">Primera</a>
+                                <span class="page-link btn btn-light" th:unless="${currentPage > 1}">Primera</span>
+                            </li>
+
+                            <li class="page-item">
+                                <a class="page-link btn btn-light" th:if="${currentPage > 1}"
+                                   th:href="@{'/addEmployeeToContract/page/' + ${currentPage - 1}+'/'+${contract.idContract}}">Anterior</a>
+                                <span class="page-link btn btn-light" th:unless="${currentPage > 1}">Anterior</span>
+                            </li>
+
+                            <li class="page-item pagination">
+                                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                                    <a class=" page-item page-link btn btn-light page-item" th:if="${i != currentPage}"
+                                       th:href="@{'/addEmployeeToContract/page/' + ${i}+'/'+${contract.idContract}}">[[${i}]]</a>
+                                    <span class="page-item page-link btn btn-light page-item"
+                                          th:unless="${i != currentPage}">[[${i}]]</span>
+                                </span>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link btn btn-light" th:if="${currentPage < totalPages}"
+                                   th:href="@{'/addEmployeeToContract/page/' + ${currentPage + 1}+'/'+${contract.idContract}}">Siguiente</a>
+                                <span class="page-link btn btn-light"
+                                      th:unless="${currentPage < totalPages}">Siguiente</span>
+                            </li>
+
+                            <li class="page-item">
+                                <a class="page-link btn btn-light" th:if="${currentPage < totalPages}"
+                                   th:href="@{'/addEmployeeToContract/page/' + ${totalPages}+'/'+${contract.idContract}}">Ultima</a>
+                                <span class="page-link btn btn-light"
+                                      th:unless="${currentPage < totalPages}">Ultima</span>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="text-center p-2" th:if="${employees == null or employees.isEmpty()}">
+                    <span>No quedan empleados por añadir</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="layout/template :: footer"></footer>
+</body>
+</html>
